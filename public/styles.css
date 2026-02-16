@@ -86,12 +86,18 @@ h2,
 }
 
 #landing {
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .landing-wrap {
   display: grid;
   gap: 1.2rem;
+  align-content: start;
+  grid-auto-rows: max-content;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.35rem;
 }
 
 .landing-hero {
@@ -305,6 +311,26 @@ input {
 }
 
 .messages {
+  scrollbar-color: #5aa4ff rgba(255, 255, 255, 0.08);
+  scrollbar-width: thin;
+}
+
+.landing-wrap::-webkit-scrollbar {
+  width: 10px;
+}
+
+.landing-wrap::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.landing-wrap::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5be8bc, #5aa4ff);
+  border-radius: 999px;
+  border: 2px solid rgba(8, 15, 36, 0.8);
+}
+
+.landing-wrap {
   scrollbar-color: #5aa4ff rgba(255, 255, 255, 0.08);
   scrollbar-width: thin;
 }
@@ -606,6 +632,10 @@ input {
 
   .feature-card {
     padding: 0.85rem;
+  }
+
+  .landing-wrap {
+    padding-right: 0.2rem;
   }
 
   .messages {

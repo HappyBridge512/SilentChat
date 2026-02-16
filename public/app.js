@@ -42,6 +42,7 @@ let activeReply = null;
 const messageById = new Map();
 
 const LINK_RE = /\b((?:https?:\/\/|www\.)[^\s<]+)/gi;
+const CREATED_ROOM_CACHE_KEY = 'silent_duo_created_room';
 
 function switchPanel(panel) {
   landingPanel.classList.remove('active');
@@ -311,6 +312,32 @@ function clearClientTraces() {
   try { localStorage.clear(); } catch (_error) {}
 }
 
+function cacheCreatedRoom(inviteUrl, hostUrl) {
+  try {
+    sessionStorage.setItem(CREATED_ROOM_CACHE_KEY, JSON.stringify({
+      inviteUrl,
+      hostUrl
+    }));
+  } catch (_error) {
+    // Ignore storage write failures.
+  }
+}
+
+function restoreCreatedRoomFromCache() {
+  try {
+    const raw = sessionStorage.getItem(CREATED_ROOM_CACHE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.inviteUrl || !parsed?.hostUrl) return;
+
+    inviteLinkInput.value = parsed.inviteUrl;
+    openRoomLink.href = parsed.hostUrl;
+    createdRoom.classList.remove('hidden');
+  } catch (_error) {
+    // Ignore corrupted cache.
+  }
+}
+
 function emitTypingStop() {
   if (!typingActive || !roomActive) return;
   typingActive = false;
@@ -345,6 +372,7 @@ async function createRoom() {
     inviteLinkInput.value = inviteAbsolute;
     openRoomLink.href = hostAbsolute;
     createdRoom.classList.remove('hidden');
+    cacheCreatedRoom(inviteAbsolute, hostAbsolute);
   } catch (err) {
     alert(err.message || 'Помилка створення кімнати.');
   } finally {
@@ -589,4 +617,5 @@ if (roomContext) {
   connectToRoom(roomContext.roomId, roomContext.token);
 } else {
   switchPanel(landingPanel);
+  restoreCreatedRoomFromCache();
 }

@@ -1,5 +1,6 @@
 ﻿const path = require('path');
 const os = require('os');
+const fsSync = require('fs');
 const fs = require('fs/promises');
 const express = require('express');
 const http = require('http');
@@ -20,6 +21,7 @@ const ROOM_TTL_MS = Number(process.env.ROOM_TTL_MS || 60 * 60 * 1000);
 const ROOM_CLEANUP_INTERVAL_MS = Number(process.env.ROOM_CLEANUP_INTERVAL_MS || 60 * 1000);
 
 const uploadsDir = path.join(__dirname, 'uploads');
+fsSync.mkdirSync(uploadsDir, { recursive: true });
 
 const roomManager = new RoomManager({
   uploadsDir,
@@ -32,7 +34,12 @@ let tunnelInstance = null;
 let roomCleanupTimer = null;
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, uploadsDir),
+  destination: (_req, _file, cb) => {
+    fsSync.mkdir(uploadsDir, { recursive: true }, (err) => {
+      if (err) return cb(err);
+      return cb(null, uploadsDir);
+    });
+  },
   filename: (_req, file, cb) => {
     const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
     cb(null, `${Date.now()}-${safeName}`);
@@ -360,3 +367,4 @@ async function shutdown() {
 
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
+
