@@ -1,0 +1,28 @@
+{
+  "name": "web_chat",
+  "version": "1.0.0",
+  "description": "Anonymous one-room chat for two users",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:clean": "node scripts/free-port.js 3000 && node server.js",
+    "dev": "node server.js",
+    "start:public": "set ENABLE_TUNNEL=true&& node server.js",
+    "start:public:clean": "node scripts/free-port.js 3000 && npm run start:public",
+    "test:smoke": "node tests/smoke.js"
+  },
+  "keywords": [
+    "chat",
+    "socketio",
+    "anonymous"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cloudflared": "^0.7.1",
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  }
+}

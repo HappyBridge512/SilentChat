@@ -1,0 +1,110 @@
+﻿<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Silent Duo Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="bg-shape bg-shape-a"></div>
+  <div class="bg-shape bg-shape-b"></div>
+
+  <main class="container">
+    <section id="landing" class="panel active">
+      <div class="landing-wrap">
+        <header class="landing-hero">
+          <p class="eyebrow">Anonymous • Ephemeral • Two People Only</p>
+          <h1>Silent Duo Chat</h1>
+          <p class="subtitle">
+            Анонімна кімната без реєстрації для приватного діалогу між двома людьми.
+            Запрошення одноразове, історія та файли видаляються після завершення.
+          </p>
+          <div class="hero-actions">
+            <button id="createRoomBtn" class="btn btn-primary">Створити кімнату</button>
+            <span class="hero-hint">Працює на ПК і мобільних, з підтримкою файлів та фото.</span>
+          </div>
+        </header>
+
+        <div id="createdRoom" class="created-room hidden">
+          <p>Кімнату створено. Надішли це посилання другому учаснику:</p>
+          <div class="link-row">
+            <input id="inviteLink" readonly />
+            <button id="copyInviteBtn" class="btn btn-secondary">Копіювати</button>
+          </div>
+          <a id="openRoomLink" class="btn btn-primary" href="#">Увійти в кімнату</a>
+        </div>
+
+        <section class="landing-grid">
+          <article class="feature-card">
+            <h3>Як це працює</h3>
+            <p>Створюєш кімнату, отримуєш лінк, передаєш його співрозмовнику — і спілкуєтесь лише вдвох.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Файли та фото</h3>
+            <p>Надсилай документи, зображення або вставляй фото з буфера прямо в чат.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Одноразове запрошення</h3>
+            <p>Після входу другого учасника посилання більше не приймає нові підключення.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Ефемерність</h3>
+            <p>При виході будь-кого кімната закривається, історія і тимчасові файли очищаються.</p>
+          </article>
+        </section>
+
+      </div>
+    </section>
+
+    <section id="chat" class="panel">
+      <header class="chat-head">
+        <div>
+          <p class="eyebrow" id="roomMeta">Кімната</p>
+          <h2 id="roleTitle">Підключення...</h2>
+        </div>
+        <button id="leaveBtn" class="btn btn-danger">Покинути</button>
+      </header>
+
+      <div id="statusBar" class="status-bar">Підключення...</div>
+
+      <div id="messages" class="messages"></div>
+
+      <div class="typing-dock">
+        <div id="typingIndicator" class="typing-indicator"> </div>
+        <div id="uploadProgress" class="upload-progress hidden">
+          <div id="uploadProgressBar" class="upload-progress-bar"></div>
+        </div>
+      </div>
+
+      <div id="replyBox" class="reply-box hidden">
+        <div class="reply-box-label">Відповідь на: <span id="replyAuthor"></span></div>
+        <div id="replyPreview" class="reply-box-preview"></div>
+        <button id="cancelReplyBtn" class="btn btn-secondary" type="button">Скасувати</button>
+      </div>
+
+      <form id="composer" class="composer">
+        <input id="messageInput" type="text" placeholder="Напишіть повідомлення..." maxlength="2000" autocomplete="off" />
+        <label class="file-btn" for="fileInput">Файл/Фото</label>
+        <input id="fileInput" type="file" hidden />
+        <button type="submit" class="btn btn-primary">Надіслати</button>
+      </form>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden"></div>
+  <div id="imageModal" class="image-modal hidden" aria-hidden="true">
+    <button id="closeImageModalBtn" type="button" class="image-modal-close">Закрити</button>
+    <figure class="image-modal-figure">
+      <img id="imageModalImg" class="image-modal-img" alt="" />
+      <figcaption id="imageModalCaption" class="image-modal-caption"></figcaption>
+    </figure>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
